@@ -1,0 +1,84 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: vv-custodyandpossession-api
+  labels:
+    app: vv-custodyandpossession-api
+    app-role: api
+    owner: mobile
+    stage: prd
+    tier: backend
+spec:
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    app: vv-custodyandpossession-api
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app-role: api
+        customer-facing: "false"
+        name: vv-custodyandpossession-api
+        app: vv-custodyandpossession-api
+        owner: mobile
+        stage: prd
+        tier: backend
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: vv-custodyandpossession-api
+          image: vv-custodyandpossession-api:latest
+          imagePullPolicy: IfNotPresent
+          name: vv-custodyandpossession-api
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 18
+            successThreshold: 1
+            timeoutSeconds: 2
+          resources:
+            limits:
+              cpu: 600m
+              memory: 800Mi
+            requests:
+              cpu: 200m
+              memory: 400Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+    - type: ConfigChange
+

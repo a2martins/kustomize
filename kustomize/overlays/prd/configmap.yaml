@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vv-custodyandpossession-api
+data:
+  BASE_URL_VV: "xxx"
+  JWT_SECRET: "xxx"
+  ORACLE_URL: "xxx"
+  ORACLE_SCHEMA: "xxx"
+  ORACLE_USER: "xxx"
+  ORACLE_PASS: "xxx"

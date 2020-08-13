@@ -1,0 +1,9 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: vv-custodyandpossession-api
+spec:
+  template:
+    metadata:
+      labels:
+        branch_name_slug: ${BRANCH_NAME_SLUG}

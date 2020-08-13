@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app: vv-custodyandpossession-api
+resources:
+  - deployment.yaml
+  - servicepossession.yaml
+  - servicecustody.yaml
+configMapGenerator:
+  - literals:
+    - TZ=America/Sao_Paulo
+    - BASE_URL_VV=xxx
+    - JWT_SECRET=xxx
+    - ORACLE_URL=xxx
+    - ORACLE_SCHEMA=xxx
+    - ORACLE_USER=xxx
+    - ORACLE_PASS=xxx
+  name: vv-custodyandpossession-api
